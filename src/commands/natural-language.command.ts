@@ -1,10 +1,13 @@
-import { Command, CommandRunner, Option } from 'nest-commander';
+import { spawn } from 'node:child_process';
 import { Injectable } from '@nestjs/common';
-import { CommandParserService, CommandOption } from '../services/command-parser.service';
-import inquirer from 'inquirer';
 import * as chalk from 'chalk';
+import inquirer from 'inquirer';
+import { Command, CommandRunner, Option } from 'nest-commander';
 import * as ora from 'ora';
-import { spawn } from 'child_process';
+import {
+  CommandOption,
+  CommandParserService,
+} from '../services/command-parser.service';
 
 interface NaturalLanguageCommandOptions {
   instruction?: string;
@@ -15,7 +18,7 @@ interface NaturalLanguageCommandOptions {
 @Command({
   name: 'nlcli',
   description: 'Convert natural language instructions to bash commands',
-  options: { isDefault: true }
+  options: { isDefault: true },
 })
 export class NaturalLanguageCommand extends CommandRunner {
   constructor(private readonly commandParser: CommandParserService) {
@@ -24,7 +27,7 @@ export class NaturalLanguageCommand extends CommandRunner {
 
   async run(
     passedParams: string[],
-    options?: NaturalLanguageCommandOptions,
+    options?: NaturalLanguageCommandOptions
   ): Promise<void> {
     console.log(chalk.blue.bold('🚀 Natural Language CLI'));
     console.log(chalk.gray('Convert your instructions into bash commands\n'));
@@ -38,7 +41,8 @@ export class NaturalLanguageCommand extends CommandRunner {
           type: 'input',
           name: 'userInstruction',
           message: 'What would you like to do?',
-          validate: (input) => input.trim().length > 0 || 'Please enter an instruction',
+          validate: (input) =>
+            input.trim().length > 0 || 'Please enter an instruction',
         },
       ]);
       instruction = userInstruction;
@@ -50,7 +54,9 @@ export class NaturalLanguageCommand extends CommandRunner {
     spinner.stop();
 
     if (commandOptions.length === 0) {
-      console.log(chalk.red('❌ No matching commands found for your instruction.'));
+      console.log(
+        chalk.red('❌ No matching commands found for your instruction.')
+      );
       return;
     }
 
@@ -58,7 +64,9 @@ export class NaturalLanguageCommand extends CommandRunner {
     console.log(chalk.green.bold('\n📋 Available Commands:'));
     commandOptions.forEach((option, index) => {
       const riskColor = this.getRiskColor(option.risk);
-      console.log(`\n${chalk.bold(`${index + 1}.`)} ${chalk.cyan(option.command)}`);
+      console.log(
+        `\n${chalk.bold(`${index + 1}.`)} ${chalk.cyan(option.command)}`
+      );
       console.log(`   ${chalk.gray(option.description)}`);
       console.log(`   ${riskColor(`Risk: ${option.risk.toUpperCase()}`)}`);
     });
@@ -90,10 +98,14 @@ export class NaturalLanguageCommand extends CommandRunner {
     console.log(chalk.blue.bold('\n📝 Command Details:'));
     console.log(`Command: ${chalk.cyan(selectedCommand.command)}`);
     console.log(`Description: ${chalk.gray(selectedCommand.description)}`);
-    console.log(`Risk Level: ${this.getRiskColor(selectedCommand.risk)(selectedCommand.risk.toUpperCase())}`);
+    console.log(
+      `Risk Level: ${this.getRiskColor(selectedCommand.risk)(selectedCommand.risk.toUpperCase())}`
+    );
 
     if (options?.dry) {
-      console.log(chalk.yellow('\n🔍 Dry run mode - command will not be executed.'));
+      console.log(
+        chalk.yellow('\n🔍 Dry run mode - command will not be executed.')
+      );
       return;
     }
 
@@ -145,7 +157,9 @@ export class NaturalLanguageCommand extends CommandRunner {
     }
   }
 
-  private runShellCommand(command: string): Promise<{ success: boolean; output?: string; error?: string }> {
+  private runShellCommand(
+    command: string
+  ): Promise<{ success: boolean; output?: string; error?: string }> {
     return new Promise((resolve) => {
       const child = spawn('sh', ['-c', command], {
         stdio: ['pipe', 'pipe', 'pipe'],
@@ -207,4 +221,4 @@ export class NaturalLanguageCommand extends CommandRunner {
   parseDry(): boolean {
     return true;
   }
-} 
+}

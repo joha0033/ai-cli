@@ -107,6 +107,27 @@ pnpm run build
 pnpm test
 ```
 
+### Code Quality
+```bash
+# Format code
+pnpm format
+
+# Check formatting
+pnpm format:check
+
+# Lint code
+pnpm lint
+
+# Check linting
+pnpm lint:check
+
+# Run both linting and formatting
+pnpm check
+
+# Check code quality for CI
+pnpm check:ci
+```
+
 ## Architecture
 
 The CLI is built with:
@@ -114,6 +135,7 @@ The CLI is built with:
 - **Inquirer**: For interactive prompts
 - **Chalk**: For colored terminal output
 - **Ora**: For loading spinners
+- **Biome.js**: For fast linting and formatting
 
 ### Key Components
 
