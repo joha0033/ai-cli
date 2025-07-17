@@ -1,5 +1,8 @@
 # Natural Language CLI (nlcli)
 
+[![CI/CD Pipeline](https://github.com/joha0033/ai-cli/workflows/CI/CD%20Pipeline/badge.svg)](https://github.com/joha0033/ai-cli/actions)
+[![Coverage](https://codecov.io/gh/joha0033/ai-cli/branch/main/graph/badge.svg)](https://codecov.io/gh/joha0033/ai-cli)
+
 A command-line interface that converts natural language instructions into bash commands using NestJS Commander.
 
 ## Features

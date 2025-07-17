@@ -53,6 +53,29 @@ jobs:
     - name: Run tests with coverage
       run: pnpm run test:ci
       
+    - name: Check coverage thresholds
+      run: |
+        # Check if coverage meets thresholds
+        if [ -f "./coverage/lcov.info" ]; then
+          echo "Coverage report generated successfully"
+          # Jest will fail if coverage thresholds are not met
+          # This step ensures we explicitly check coverage
+          pnpm run test:cov -- --coverageReporters=text --coverageReporters=lcov
+        else
+          echo "Error: Coverage report not generated"
+          exit 1
+        fi
+      
+    - name: Display coverage summary
+      run: |
+        if [ -f "./coverage/lcov.info" ]; then
+          echo "=== Coverage Summary ==="
+          # Extract and display coverage percentages from lcov.info
+          grep -E "^SF:|^LF:|^LH:|^BRF:|^BRH:" ./coverage/lcov.info | head -20
+          echo ""
+          echo "For detailed coverage, check the Codecov report above."
+        fi
+      
     - name: Build application
       run: pnpm run build
       
