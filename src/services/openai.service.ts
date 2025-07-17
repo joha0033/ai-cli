@@ -17,7 +17,9 @@ export class OpenAIService {
 
   async convertToCommands(instruction: string): Promise<CommandOption[]> {
     if (!this.openai) {
-      throw new Error('OpenAI API key not configured. Please set OPENAI_API_KEY environment variable.');
+      throw new Error(
+        'OpenAI API key not configured. Please set OPENAI_API_KEY environment variable.'
+      );
     }
 
     const systemPrompt = `You are a helpful assistant that converts natural language instructions into bash/shell commands. 
@@ -54,7 +56,7 @@ Important guidelines:
         model: 'gpt-3.5-turbo',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: instruction }
+          { role: 'user', content: instruction },
         ],
         max_tokens: 800,
         temperature: 0.3,
@@ -67,7 +69,7 @@ Important guidelines:
 
       // Parse the JSON response
       const commands = JSON.parse(content) as CommandOption[];
-      
+
       // Validate the response structure
       if (!Array.isArray(commands)) {
         throw new Error('Invalid response format from OpenAI');
@@ -89,15 +91,19 @@ Important guidelines:
         console.error('Failed to parse OpenAI response:', error.message);
         throw new Error('Invalid JSON response from OpenAI');
       }
-      
+
       if (error.code === 'insufficient_quota') {
-        throw new Error('OpenAI API quota exceeded. Please check your billing.');
+        throw new Error(
+          'OpenAI API quota exceeded. Please check your billing.'
+        );
       }
-      
+
       if (error.code === 'invalid_api_key') {
-        throw new Error('Invalid OpenAI API key. Please check your OPENAI_API_KEY environment variable.');
+        throw new Error(
+          'Invalid OpenAI API key. Please check your OPENAI_API_KEY environment variable.'
+        );
       }
-      
+
       console.error('OpenAI API error:', error);
       throw new Error(`OpenAI API error: ${error.message}`);
     }
@@ -106,4 +112,4 @@ Important guidelines:
   isConfigured(): boolean {
     return this.openai !== null;
   }
-} 
+}
