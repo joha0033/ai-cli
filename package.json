@@ -34,7 +34,9 @@
     "rxjs": "^7.8.1",
     "inquirer": "^9.0.0",
     "chalk": "^4.1.2",
-    "ora": "^5.4.1"
+    "ora": "^5.4.1",
+    "openai": "^4.0.0",
+    "dotenv": "^16.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.0",

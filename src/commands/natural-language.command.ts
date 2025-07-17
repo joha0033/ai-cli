@@ -50,7 +50,7 @@ export class NaturalLanguageCommand extends CommandRunner {
 
     // Parse the natural language instruction
     const spinner = ora('Parsing your instruction...').start();
-    const commandOptions = this.commandParser.parseNaturalLanguage(instruction);
+    const commandOptions = await this.commandParser.parseNaturalLanguage(instruction);
     spinner.stop();
 
     if (commandOptions.length === 0) {

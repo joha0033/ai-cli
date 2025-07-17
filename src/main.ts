@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import 'dotenv/config';
 import { CommandFactory } from 'nest-commander';
 import { AppModule } from './app.module';
 

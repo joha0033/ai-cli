@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { OpenAIService } from './openai.service';
 
 export interface CommandOption {
   command: string;
@@ -8,7 +9,26 @@ export interface CommandOption {
 
 @Injectable()
 export class CommandParserService {
-  parseNaturalLanguage(input: string): CommandOption[] {
+  constructor(private readonly openaiService: OpenAIService) {}
+
+  async parseNaturalLanguage(input: string): Promise<CommandOption[]> {
+    // Try OpenAI first if configured
+    if (this.openaiService.isConfigured()) {
+      try {
+        const commands = await this.openaiService.convertToCommands(input);
+        if (commands.length > 0) {
+          return commands;
+        }
+      } catch (error) {
+        console.warn('OpenAI API failed, falling back to pattern matching:', error.message);
+      }
+    }
+
+    // Fallback to pattern matching
+    return this.parseWithPatterns(input);
+  }
+
+  private parseWithPatterns(input: string): CommandOption[] {
     const normalizedInput = input.toLowerCase().trim();
     const commands: CommandOption[] = [];
 
