@@ -20,7 +20,10 @@ export class CommandParserService {
           return commands;
         }
       } catch (error) {
-        console.warn('OpenAI API failed, falling back to pattern matching:', error.message);
+        console.warn(
+          'OpenAI API failed, falling back to pattern matching:',
+          error.message
+        );
       }
     }
 
