@@ -25,10 +25,12 @@ pnpm install
 pnpm run build
 ```
 
-3. Link the CLI globally (optional):
+3. Install the CLI globally:
 ```bash
-pnpm link --global
+pnpm run install-global
 ```
+
+This will build the project and link it globally so you can use `nlcli` from anywhere.
 
 ## Configuration
 
@@ -56,24 +58,46 @@ If no OpenAI API key is configured, the CLI will fall back to pattern matching. 
 
 ## Usage
 
-### Interactive Mode
-Run the CLI without any arguments to enter interactive mode:
+### Global Usage (Recommended)
+Once installed globally, you can use `nlcli` from any directory:
+
 ```bash
-npx ts-node src/main.ts
-# or if linked globally:
+# Interactive mode - CLI will prompt for instructions
 nlcli
+
+# Direct instruction
+nlcli -i "list all files in the current directory"
+
+# Dry run mode - preview commands without executing
+nlcli -d -i "delete all text files"
+
+# Get help
+nlcli --help
 ```
 
-### Command Line Arguments
-You can also pass instructions directly:
+### Local Development Usage
+For development or if not installed globally:
 ```bash
+# Interactive mode
+npx ts-node src/main.ts
+
+# Direct instruction
 npx ts-node src/main.ts -i "list all files in the current directory"
+
+# Dry run mode
+npx ts-node src/main.ts -d -i "delete all text files"
 ```
 
-### Dry Run Mode
-Preview commands without executing them:
+### Global CLI Management
 ```bash
-npx ts-node src/main.ts -d -i "delete all text files"
+# Update the global CLI after making changes
+pnpm run update-global
+
+# Uninstall the global CLI
+pnpm run uninstall-global
+
+# Reinstall the global CLI
+pnpm run install-global
 ```
 
 ## Example Commands
